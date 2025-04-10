@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:16
+    container_name: gitec-postgres-dev
+    environment:
+      POSTGRES_DB: gitecsl
+      POSTGRES_USER: gitecsl
+      POSTGRES_PASSWORD: gitecsl2025
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    networks:
+      - red-db-gitecsl
+volumes:
+  postgres_data:
+networks:
+  red-db-gitecsl:
+    name: red-db-gitecsl
