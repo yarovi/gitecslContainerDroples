@@ -1,0 +1,28 @@
+version: '3.9'  services:   keycloak:       image: quay.io/keycloak/keycloak:26.1.3       container_name: gitec-keycloak-dev       ports:         - 9991:8080       environment:         KC_BOOTSTRAP_ADMIN_USERNAME: admin         KC_BOOTSTRAP_ADMIN_PASSWORD: admin         KC_DB: postgres         KC_DB_URL: jdbc:postgresql://postgres:5432/gitecsl         KC_DB_USERNAME: gitecsl         KC_DB_PASSWORD: gitecsl2025         KC_HOSTNAME: inamsay.xyz         KC_PROXY: edge       command: ["start-dev"]       volumes:         - keycloak_data:/opt/keycloak/data       networks:         - red-db-gitecsl volumes:   keycloak_data: networks:   red-db-gitecsl:     name: red-db-gitecsl     external: trueversion: '3.9'
+
+services:
+  keycloak:
+      image: quay.io/keycloak/keycloak:26.1.3
+      container_name: gitec-keycloak-dev
+      ports:
+        - 9991:8080
+      environment:
+        KC_BOOTSTRAP_ADMIN_USERNAME: admin
+        KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+        KC_DB: postgres
+        KC_DB_URL: jdbc:postgresql://postgres:5432/gitecsl
+        KC_DB_USERNAME: gitecsl
+        KC_DB_PASSWORD: gitecsl2025
+        KC_HOSTNAME: inamsay.xyz
+        KC_PROXY: edge
+      command: ["start-dev"]
+      volumes:
+        - keycloak_data:/opt/keycloak/data
+      networks:
+        - red-db-gitecsl
+volumes:
+  keycloak_data:
+networks:
+  red-db-gitecsl:
+    name: red-db-gitecsl
+    external: true

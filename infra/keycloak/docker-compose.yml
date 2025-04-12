@@ -5,7 +5,7 @@ services:
       image: quay.io/keycloak/keycloak:26.1.3
       container_name: gitec-keycloak-dev
       ports:
-        - 9991:8080
+        - 9991:8443
       environment:
         KC_BOOTSTRAP_ADMIN_USERNAME: admin
         KC_BOOTSTRAP_ADMIN_PASSWORD: admin
@@ -13,13 +13,23 @@ services:
         KC_DB_URL: jdbc:postgresql://postgres:5432/gitecsl
         KC_DB_USERNAME: gitecsl
         KC_DB_PASSWORD: gitecsl2025
-      command: ["start-dev"]
+
+        KC_HTTPS_PORT: 8443
+        KC_PROXY: edge  # Necesario para Nginx
+        KC_HOSTNAME: www.inamsay.xyz  # Tu dominio
+        KC_HTTP_RELATIVE_PATH: /keycloak
+        KC_HTTP_ENABLED: "false"  # Fuerza HTTPS
+        KC_HTTPS_CERTIFICATE_FILE: /etc/x509/https/fullchain.pem  # Ruta interna del certificado
+        KC_HTTPS_CERTIFICATE_KEY_FILE: /etc/x509/https/privkey.pem
+      command: ["start"]
       volumes:
         - keycloak_data:/opt/keycloak/data
+        - /etc/letsencrypt/live/inamsay.xyz/fullchain.pem:/etc/x509/https/fullchain.pem:ro
+        - /etc/letsencrypt/live/inamsay.xyz/privkey.pem:/etc/x509/https/privkey.pem:ro
       networks:
         - red-db-gitecsl
 volumes:
-  keycloak_data: 
+  keycloak_data:
 networks:
   red-db-gitecsl:
     name: red-db-gitecsl
